@@ -73,7 +73,7 @@ jobs:
           args: '-no-fail -fmt sarif -out results.sarif ./...'
 
     - name: Upload SARIF file
-      uses: github/codeql-action/upload-sarif@v2
+      uses: github/codeql-action/upload-sarif@v3
       with:
         token: ${{ secrets.WORKFLOW_PAT }}
         sarif_file: results.sarif
