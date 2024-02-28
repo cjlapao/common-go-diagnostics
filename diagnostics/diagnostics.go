@@ -29,7 +29,9 @@ func FromContext(ctx context.Context) *Diagnostics {
 	traceId := uuid.New().String()
 	if ctx != nil {
 		if ctx.Value(TraceID) != nil {
-			traceId = ctx.Value(TraceID).(string)
+			if id, ok := ctx.Value(TraceID).(string); ok {
+				traceId = id
+			}
 		} else {
 			ctx = context.WithValue(ctx, TraceID, traceId)
 		}
