@@ -5,4 +5,6 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/cjlapao/common-go-diagnostics)](https://goreportcard.com/report/github.com/cjlapao/common-go-diagnostics)
 [![Lint Codebase](https://github.com/cjlapao/common-go-diagnostics/actions/workflows/linter.yml/badge.svg)](https://github.com/cjlapao/common-go-diagnostics/actions/workflows/linter.yml)
 
-Simple configuration package for Golang projects.
+Diagnostics tools for Go applications.
+
+This allows to have a trace for each errors and also allow to pass the diagnostics down the line and accumulate the stack
