@@ -1,0 +1,88 @@
+name: Create Release PR
+run-name: Create release PR for new ${{ github.event.inputs.version }} version
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        required: true
+        type: choice
+        description: "What type of release is this"
+        options:
+          - "major"
+          - "minor"
+          - "patch"
+
+jobs:
+  create-release-pr:
+    name: Create release PR
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      new_version: ""
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+      - name: Setup Go 1.21.x
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21.x'
+          cache-dependency-path: ${{ github.workspace }}/go.sum
+
+      - name: Test
+        working-directory: ${{ github.workspace }}
+        run: |
+          go install github.com/axw/gocov/gocov@latest
+          go install github.com/AlekSi/gocov-xml@latest
+          go install github.com/matm/gocov-html/cmd/gocov-html@latest
+
+          go test -coverprofile coverage.txt -covermode count -v ./...
+          gocov convert coverage.txt | gocov-xml > cobertura-coverage.xml
+
+      - name: Make Coverage Badge
+        uses: cjlapao/simple-badge-generator-action@v1.0
+        with:
+          title: Code Coverage
+          badge-type: cobertura
+          badge-path: ./badges/coverage.svg
+          badge-icon: ""
+          cobertura-path: ./cobertura-coverage.xml
+
+      - name: Bump version and push
+        run: |
+          git config --global user.email "cjlapao@gmail.com"
+          git config --global user.name "cjlapao"
+
+          NEW_VERSION=$(./.github/workflow_scripts/increment-version.sh -t ${{ inputs.version }} -f VERSION)
+          echo "$NEW_VERSION" > ./VERSION
+          
+          git checkout -b release/"$NEW_VERSION"
+
+          git add VERSION ./badges/*
+          git commit -m "Release version $NEW_VERSION"
+
+          git push --set-upstream origin release/"$NEW_VERSION"
+
+          echo "new_version=$NEW_VERSION" >> "$GITHUB_ENV"
+
+      - name: Create PR
+        run: |
+          LAST_PR=$(gh pr list --repo ${{ github.repository }} --limit 1 --state merged --search "Release version" --json number | jq -r '.[0].number')
+          ./.github/workflow_scripts/generate-release-notes.sh ${{ github.repository }} "$LAST_PR" ${{ env.new_version }}
+          gh pr create \
+            --title "Release version ${{ env.new_version }}" \
+            --body-file releasenotes.md \
+            --base main \
+            --head release/${{ env.new_version }}
+          gh pr edit --add-label release-request
+        env:
+          GH_TOKEN: ${{ secrets.WORKFLOW_PAT }}

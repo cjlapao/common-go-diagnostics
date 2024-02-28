@@ -1,0 +1,54 @@
+name: bug report
+description: Create a report to help us improve
+labels:
+- bug
+body:
+- type: textarea
+  id: bug_description
+  attributes:
+    label: Bug description
+    render: Markdown
+    value: '**Please describe the bug**'
+- type: textarea
+  id: reproduce_steps
+  attributes:
+    label: Steps to reproduce
+    value: |-
+        Steps to reproduce the behavior:
+        1. Go to '...'
+        2. Click on '....'
+        3. Scroll down to '....'
+        4. See error
+- type: input
+  id: version
+  attributes:
+    label: Version
+    placeholder: e.g. v1.0.0
+- type: textarea
+  id: expected_behavior
+  attributes:
+    label: Expected behavior
+    value: A clear and concise description of what you expected to happen.
+- type: textarea
+  id: actual_behavior
+  attributes:
+    label: Actual behavior
+    value: A clear and concise description of what actually happened.
+- type: textarea
+  id: screenshots
+  attributes:
+    label: Screenshots
+- type: textarea
+  id: additional_context
+  attributes:
+    label: Additional context
+    value: |-
+        Add any other context about the problem here.
+         For example, if you are using a specific version of the language, or if you are using a specific operating system.
+- type: checkboxes
+  id: validation
+  attributes:
+    label: Validation
+    options:
+        - label: Yes, I've included all of the above information (Version, settings, logs, etc.)
+          required: true

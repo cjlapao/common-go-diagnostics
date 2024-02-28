@@ -1,0 +1,10 @@
+**/goreleaser*
+**/dist/*
+**/out/*
+.env
+
+.tmp/
+coverage/
+super-linter.log
+coverage.txt
+cobertura-coverage.xml

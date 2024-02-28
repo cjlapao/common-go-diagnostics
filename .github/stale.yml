@@ -1,0 +1,16 @@
+daysUntilStale: 60
+daysUntilClose: 7
+exemptProjects: false
+exemptAssignees: false
+markComment: |-
+    This issue has been automatically marked as stale because it has not had recent activity.
+    It will be closed if no further activity occurs.
+    Thank you for your contributions.
+unmarkComment: |-
+    This issue has been automatically unmarked as stale because it has had recent activity.
+    It will be closed if no further activity occurs.
+    Thank you for your contributions.
+closeComment: |-
+    This issue has been automatically closed due to lack of activity.
+    This is a bot generated comment, please do not respond.
+limitPerRun: 30

@@ -1,0 +1,17 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "GitHub Diagnostics Debugging",
+      "type": "go",
+      "request": "launch",
+      "console": "internalConsole",
+      "mode": "debug",
+      "cwd": "${workspaceFolder}",
+      "program": "${workspaceFolder}/diagnostics/test/main_debug.go",
+      // Comment out if you do not need to setup environment variables for the module
+      // "envFile": "${workspaceFolder}/.env",
+      "args": []
+    }
+  ]
+}

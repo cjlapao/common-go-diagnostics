@@ -1,0 +1,16 @@
+version: 2
+updates:
+  - package-ecosystem: "gomod"
+    allow:
+      - dependency-name: "github.com/dependabot-test/go-modules-public"
+        dependency-type: "all"
+    timezone: "Europe/Amsterdam"
+    update-types: ["securit1y", "dependencies"]
+    insecure-external-code-execution: "allow"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "monthly"
