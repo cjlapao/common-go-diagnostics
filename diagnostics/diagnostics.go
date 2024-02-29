@@ -104,13 +104,14 @@ func (d *Diagnostics) AddItem(diag *DiagnosticItem) {
 	d.stack = append(d.stack, diag)
 }
 
-func (d *Diagnostics) Append(diags []*DiagnosticItem) {
+func (d *Diagnostics) Append(diagnostic *Diagnostics) {
 	for _, i := range d.stack {
-		for _, diag := range diags {
-			if strings.EqualFold(i.Code, diag.Code) && strings.EqualFold(i.Description, diag.Description) && i.Level == diag.Level {
+		for _, j := range diagnostic.stack {
+			if strings.EqualFold(i.Code, j.Code) && strings.EqualFold(i.Description, j.Description) && i.Level == j.Level {
 				return
 			}
-			d.stack = append(d.stack, diag)
+
+			d.stack = append(d.stack, j)
 		}
 	}
 }
