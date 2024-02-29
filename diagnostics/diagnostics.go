@@ -94,7 +94,7 @@ func (d *Diagnostics) AddTrace(trace string) {
 	d.stack = append(d.stack, NewTrace("", trace))
 }
 
-func (d *Diagnostics) Append(diag *DiagnosticItem) {
+func (d *Diagnostics) AddItem(diag *DiagnosticItem) {
 	for _, i := range d.stack {
 		if strings.EqualFold(i.Code, diag.Code) && strings.EqualFold(i.Description, diag.Description) && i.Level == diag.Level {
 			return
@@ -102,6 +102,17 @@ func (d *Diagnostics) Append(diag *DiagnosticItem) {
 	}
 
 	d.stack = append(d.stack, diag)
+}
+
+func (d *Diagnostics) Append(diags []*DiagnosticItem) {
+	for _, i := range d.stack {
+		for _, diag := range diags {
+			if strings.EqualFold(i.Code, diag.Code) && strings.EqualFold(i.Description, diag.Description) && i.Level == diag.Level {
+				return
+			}
+			d.stack = append(d.stack, diag)
+		}
+	}
 }
 
 func (d *Diagnostics) GetDiagnostics() []*DiagnosticItem {

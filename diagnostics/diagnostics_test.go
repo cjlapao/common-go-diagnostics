@@ -162,8 +162,8 @@ func TestAddTrace(t *testing.T) {
 	assert.Equal(t, Trace, d.stack[1].Level, "Expected level to be Trace")
 }
 
-func TestAppend(t *testing.T) {
-	t.Run("Append with new Item", func(t *testing.T) {
+func TestAddItem(t *testing.T) {
+	t.Run("AddItem with new Item", func(t *testing.T) {
 		d := New()
 		d.stack = []*DiagnosticItem{
 			{
@@ -181,7 +181,7 @@ func TestAppend(t *testing.T) {
 		}
 
 		// Append the diagnostic item to the stack
-		d.Append(diag)
+		d.AddItem(diag)
 
 		// Verify that the stack has 1 item
 		assert.Equal(t, 2, len(d.stack), "Expected stack to have 2 item after appending")
@@ -190,7 +190,7 @@ func TestAppend(t *testing.T) {
 		assert.Equal(t, diag, d.stack[1], "Expected the appended item to be the same as the diagnostic item")
 	})
 
-	t.Run("Append with existing Item", func(t *testing.T) {
+	t.Run("AddItem with existing Item", func(t *testing.T) {
 		d := New()
 		d.stack = []*DiagnosticItem{
 			{
@@ -208,7 +208,7 @@ func TestAppend(t *testing.T) {
 		}
 
 		// Append the diagnostic item to the stack
-		d.Append(diag)
+		d.AddItem(diag)
 
 		// Verify that the stack has 1 item
 		assert.Equal(t, 1, len(d.stack), "Expected stack to have 1 item after appending")
@@ -647,5 +647,62 @@ func TestString(t *testing.T) {
 		result := d.String()
 
 		assert.Equal(t, expected, result, "Expected the string representation to match the expected value")
+	})
+}
+
+func TestAppend(t *testing.T) {
+
+	t.Run("Append with new Item", func(t *testing.T) {
+		d := New()
+		d.stack = []*DiagnosticItem{
+			{
+				Code:        "code1",
+				Description: "description1",
+				Level:       Info,
+			},
+		}
+
+		// Create a diagnostic item
+		diag := &DiagnosticItem{
+			Code:        "code2",
+			Description: "description2",
+			Level:       Info,
+		}
+
+		// Append the diagnostic item to the stack
+		d.Append([]*DiagnosticItem{diag})
+
+		// Verify that the stack has 2 items
+		assert.Equal(t, 2, len(d.stack), "Expected stack to have 2 items after appending")
+
+		// Verify that the appended item is the same as the diagnostic item
+		assert.Equal(t, diag, d.stack[1], "Expected the appended item to be the same as the diagnostic item")
+	})
+
+	t.Run("Append with existing Item", func(t *testing.T) {
+		d := New()
+		d.stack = []*DiagnosticItem{
+			{
+				Code:        "code1",
+				Description: "description1",
+				Level:       Info,
+			},
+		}
+
+		// Create a diagnostic item
+		diag := &DiagnosticItem{
+			Code:        "code1",
+			Description: "description1",
+			Level:       Info,
+		}
+
+		// Append the diagnostic item to the stack
+		d.Append([]*DiagnosticItem{diag})
+
+		// Verify that the stack still has 1 item
+		assert.Equal(t, 1, len(d.stack), "Expected stack to still have 1 item after appending")
+
+		// Verify that the appended item is the same as the diagnostic item
+		assert.Equal(t, diag, d.stack[0], "Expected the appended item to be the same as the diagnostic item")
 	})
 }
